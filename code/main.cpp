@@ -11,6 +11,7 @@
 // Helper test functions
 void testNode();
 void testNodeList();
+void testReadEnv(Env env);
 
 // Read a environment from standard input.
 void readEnvStdin(Env env);
@@ -32,7 +33,7 @@ int main(int argc, char** argv){
 
     // Load Environment 
     Env env;
-    readEnvStdin(env);
+    // readEnvStdin(env);
     
     // Solve using forwardSearch
     // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
@@ -54,7 +55,18 @@ int main(int argc, char** argv){
 }
 
 void readEnvStdin(Env env){
-    //TODO 
+    // read input as char for each env location
+    // EOF when max size is exceeded
+
+    int size = 0;
+    while(!std::cin.eof() && size < (ENV_DIM * ENV_DIM)){
+        for(int row = 0; row < ENV_DIM; row++) {
+            for(int col = 0; col < ENV_DIM; col++) {
+                std::cin >> env[row][col];
+                ++size;
+            }
+        }
+    }
 }
 
 void printPath(Env env, NodeList* solution) {
@@ -108,4 +120,17 @@ void testNodeList() {
 
     // Print out the NodeList
     std::cout << "PRINTING OUT A NODELIST IS AN EXERCISE FOR YOU TO DO" << std::endl;
+}
+
+void testReadEnv(Env env) {
+    // Test to ensure env is read correct
+
+    std::cout << "\n\nstandard print of env:\n" << std::endl;
+    for(int i = 0; i < ENV_DIM; i++) {
+            for(int j = 0; j < ENV_DIM; j++) {
+                std::cout << env[i][j];
+            }
+            std::cout << "\n";
+        }
+    std::cout << "\n";
 }

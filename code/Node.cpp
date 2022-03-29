@@ -2,26 +2,26 @@
 #include "Node.h"
 
 
-Node::Node(int row, int col, int distanceToS){
-   //TODO
-}
+Node::Node(int row, int col, int distanceToS) :
+   row(row), col(col), distanceToS(distanceToS)
+{}
     
 Node::~Node(){
-   //TODO
+   
 }
 
 int Node::getRow(){
-   //TODO
+   return row;
 }
 
 int Node::getCol(){
-   //TODO
+   return col;
 }
 
 int Node::getDistanceToS(){
-   //TODO
+   return distanceToS;
 }
 
 void Node::setDistanceToS(int distanceToS){
-   //TODO
+   this->distanceToS = distanceToS;
 }

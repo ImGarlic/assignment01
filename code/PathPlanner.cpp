@@ -17,9 +17,9 @@ void PathPlanner::initialPosition(int row, int col){
 }
 
 NodeList* PathPlanner::getReachableNodes(){
-   
+   return nullptr;
 }
 
 NodeList* PathPlanner::getPath(){
-   
+   return nullptr;
 }
