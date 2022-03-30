@@ -27,19 +27,20 @@ int main(int argc, char** argv){
     // AS YOU GO ALONG.
     // COMMENT THESE OUT BEFORE YOU SUBMIT!!!
     std::cout << "TESTING - COMMENT THE OUT TESTING BEFORE YOU SUBMIT!!!" << std::endl;
-    testNode();
-    testNodeList();
+    // testNode();
+    // testNodeList();
     std::cout << "DONE TESTING" << std::endl << std::endl;
 
     // Load Environment 
     Env env;
-    // readEnvStdin(env);
+    readEnvStdin(env);
     
     // Solve using forwardSearch
     // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
     PathPlanner* pathplanner = new PathPlanner(env, ENV_DIM, ENV_DIM);
     NodeList* reachablePositions = nullptr;
     reachablePositions = pathplanner->getReachableNodes();
+    reachablePositions->printNodes();
 
     // Get the path
     // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
@@ -60,8 +61,8 @@ void readEnvStdin(Env env){
 
     int size = 0;
     while(!std::cin.eof() && size < (ENV_DIM * ENV_DIM)){
-        for(int row = 0; row < ENV_DIM; row++) {
-            for(int col = 0; col < ENV_DIM; col++) {
+        for(int row = 0; row < ENV_DIM; ++row) {
+            for(int col = 0; col < ENV_DIM; ++col) {
                 std::cin >> env[row][col];
                 ++size;
             }
@@ -120,14 +121,24 @@ void testNodeList() {
 
     // Print out the NodeList
     std::cout << "PRINTING OUT A NODELIST IS AN EXERCISE FOR YOU TO DO" << std::endl;
+
+    // Check if a Node is in NodeList - 1 is true, 0 is false
+    std::cout << nodeList->containsNode(b2) << std::endl;
+    Node* b3 = new Node (2, 2, 2);
+    std::cout << nodeList->containsNode(b3) << std::endl;
+
+    // CLear list
+    nodeList->clear();
+    std::cout << "Cleared list\n";
+    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
 }
 
 void testReadEnv(Env env) {
-    // Test to ensure env is read correct
+    // Print out env input for test
 
     std::cout << "\n\nstandard print of env:\n" << std::endl;
-    for(int i = 0; i < ENV_DIM; i++) {
-            for(int j = 0; j < ENV_DIM; j++) {
+    for(int i = 0; i < ENV_DIM; ++i) {
+            for(int j = 0; j < ENV_DIM; ++j) {
                 std::cout << env[i][j];
             }
             std::cout << "\n";

@@ -44,7 +44,9 @@ public:
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
-
+   
+   // Print all nodes in the list
+   void printNodes();
 
    /* This is a suggestion of what you could use. */
    /* You can change this code.                   */

@@ -7,7 +7,7 @@ Node::Node(int row, int col, int distanceToS) :
 {}
     
 Node::~Node(){
-   
+
 }
 
 int Node::getRow(){

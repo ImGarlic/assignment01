@@ -6,7 +6,7 @@ clean:
 	rm -f main *.o actual.out
 
 main: main.o Node.o NodeList.o PathPlanner.o
-	g++ -Wall -Werror -std=c++14 -O -o $@ $^
+	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
 
 %.o: %.cpp
-	g++ -Wall -Werror -std=c++14 -O -c $^
+	g++ -Wall -Werror -std=c++14 -g -O -c $^
