@@ -13,8 +13,10 @@ NodeList::~NodeList(){
    
 }
 
-NodeList::NodeList(NodeList& other){
-    // TODO
+NodeList::NodeList(NodeList& other) : length(other.length){
+    for(int i = 0; i < length; ++i) {
+       nodes[i] = new Node(*other.nodes[i]);
+    }
 }
 
 
@@ -28,7 +30,7 @@ NodePtr NodeList::get(int i){
 }
 
 void NodeList::addBack(NodePtr newNode){
-   nodes[length] = newNode;
+   this->nodes[length] = newNode;
    ++length;
 }
 
@@ -43,7 +45,7 @@ bool NodeList::containsNode(NodePtr node){
 
 void NodeList::clear(){
    for(int i = length - 1; i >=0; --i){
-      delete nodes[i];
+      delete this->nodes[i];
       --length;
    }
 }
@@ -52,5 +54,6 @@ void NodeList::printNodes(){
    for(int i = 0; i < length; ++i) {
       std::cout << nodes[i]->getRow() << "," << nodes[i]->getCol() << "," << nodes[i]->getDistanceToS() << std::endl;
    }
+   std::cout << "List length: " << length << std::endl;
 }
 

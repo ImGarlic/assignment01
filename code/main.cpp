@@ -20,6 +20,10 @@ void readEnvStdin(Env env);
 // To be implemented for Milestone 3
 void printPath(Env env, NodeList* solution);
 
+// Print a list of the reachable positions and the list length
+// This includes the Start and Goal positions
+void printReachablePositions(NodeList* reachablePositions);
+
 
 int main(int argc, char** argv){
     // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE
@@ -40,7 +44,7 @@ int main(int argc, char** argv){
     PathPlanner* pathplanner = new PathPlanner(env, ENV_DIM, ENV_DIM);
     NodeList* reachablePositions = nullptr;
     reachablePositions = pathplanner->getReachableNodes();
-    reachablePositions->printNodes();
+    printReachablePositions(reachablePositions);
 
     // Get the path
     // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
@@ -71,11 +75,39 @@ void readEnvStdin(Env env){
 }
 
 void printPath(Env env, NodeList* solution) {
-    //TODO
+    Node* p = new Node(*solution->get(0));
+    Node* q;
+    for(int i = 1; i < solution->getLength() - 1; ++i) {
+        q = solution->get(i);
+        int row = q->getRow();
+        int col = q->getCol();
+        if(row == (p->getRow() - 1)) { // Check Up
+            env[row][col] = 'V';
+        }
+        if(col == (p->getCol() + 1)) { // Check Right
+            env[row][col] = '<';
+        }
+        if(row == (p->getRow() + 1)) { // Check Down
+            env[row][col] = '^';
+        }
+        if(col == (p->getCol() - 1)) { // Check Left
+            env[row][col] = '>';
+        }
+        p = q;
+    }
+    testReadEnv(env);
 }
 
-void printReachablePositions(Env env, NodeList* reachablePositions){
-    //TODO
+void printReachablePositions(NodeList* reachablePositions) {
+    for(int i = 0; i < reachablePositions->getLength(); ++i) {
+        // Node* node = new Node(reachablePositions->get(i)->getRow(), reachablePositions->get(i)->getCol(), reachablePositions->get(i)->getDistanceToS());
+        Node* node = new Node(*reachablePositions->get(i));
+        std::cout << node->getRow() << ",";
+        std::cout << node->getCol() << ",";
+        std::cout << node->getDistanceToS() << std::endl;
+        delete node;
+    }
+    std::cout << "Number reachable: " << reachablePositions->getLength() << std::endl;
 }
 
 void testNode() {

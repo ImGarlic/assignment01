@@ -45,7 +45,7 @@ public:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
    
-   // Print all nodes in the list
+   // Print all nodes for testing
    void printNodes();
 
    /* This is a suggestion of what you could use. */

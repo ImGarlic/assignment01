@@ -28,6 +28,7 @@ public:
    
    // Constructor/Destructor
    Node(int row, int col, int distanceToS);
+   Node(Node& other);
    ~Node();
     
     

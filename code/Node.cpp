@@ -3,7 +3,15 @@
 
 
 Node::Node(int row, int col, int distanceToS) :
-   row(row), col(col), distanceToS(distanceToS)
+   row(row), 
+   col(col), 
+   distanceToS(distanceToS)
+{}
+
+Node::Node(Node& other) : 
+   row(other.row), 
+   col(other.col), 
+   distanceToS(other.distanceToS) 
 {}
     
 Node::~Node(){
