@@ -4,37 +4,41 @@
 #include <iostream>
 
 
-PathPlanner::PathPlanner(Env env, int rows, int cols) {
+PathPlanner::PathPlanner(Env env, int rows, int cols)  : envCopy(env)  {
       // Copy env input to private Env
-      for(int row = 0; row < rows; ++row) {
-         for(int col = 0; col < cols; ++col) {
-            envCopy[row][col] = env[row][col];         
-            }
-      }
-      // Create first Node as initial position
-      for(int row = 0; row < rows; ++row){
-         for(int col = 0; col < cols; ++col){
-            if(envCopy[row][col] == SYMBOL_START){
-               initialPosition(row, col);
+      // Only works for fixed size environment, must be removed for milestone 4
+   //    for(int row = 0; row < rows; ++row) {
+   //       for(int col = 0; col < cols; ++col) {
+   //          envCopy[row][col] = env[row][col];
+   //          }
+   //    }
+
+   // Create first Node as initial position
+   for(int row = 0; row < rows; ++row){
+      for(int col = 0; col < cols; ++col){     
+         if(envCopy[row][col] == SYMBOL_START){
+            initialPosition(row, col);
          }
       }
    }
 }
 
 PathPlanner::~PathPlanner(){
-   
+   delete this->openList;
+   delete this->closedList;
 }
 
 void PathPlanner::initialPosition(int row, int col){
-   // Immediately adds initial pos to the open list
+   // Immediately adds initial position to the open list
    S = new Node(row, col, 0);
    openList = new NodeList();
    openList->addBack(S);
+   delete S;
 }
 
 NodeList* PathPlanner::getReachableNodes(){
-   Node* p = openList->get(0);
-   Node* q = new Node(0, 0, 0);
+   Node* p = new Node(*openList->get(0));
+   Node* q;
    closedList = new NodeList();
 
    // Add p to closed list until open list is exhausted
@@ -44,10 +48,13 @@ NodeList* PathPlanner::getReachableNodes(){
       int dis = p->getDistanceToS();
       
       // Check up and add to openList if an available path 
-      if(envCopy[row - 1][col] == SYMBOL_EMPTY || envCopy[row - 1][col] == SYMBOL_GOAL) {
-         q = new Node(row - 1, col, dis + 1);
-         if(!openList->containsNode(q)) {
-            openList->addBack(q);
+      if(row > 0) {
+         if((envCopy[row - 1][col] == SYMBOL_EMPTY || envCopy[row - 1][col] == SYMBOL_GOAL)) {
+            q = new Node(row - 1, col, dis + 1);
+            if(!openList->containsNode(q)) {
+               openList->addBack(q);
+            }
+            delete q;
          }
       }
       // Check right and add to openList if an available path 
@@ -56,6 +63,7 @@ NodeList* PathPlanner::getReachableNodes(){
          if(!openList->containsNode(q)) {
             openList->addBack(q);
          }
+         delete q;
       }
       // Check down and add to openList if an available path 
       if(envCopy[row + 1][col] == SYMBOL_EMPTY || envCopy[row + 1][col] == SYMBOL_GOAL) {
@@ -63,13 +71,17 @@ NodeList* PathPlanner::getReachableNodes(){
          if(!openList->containsNode(q)) {
             openList->addBack(q);
          }
+         delete q;
       }
-      // Check left and add to openList if an available path 
-      if(envCopy[row][col - 1] == SYMBOL_EMPTY || envCopy[row][col - 1] == SYMBOL_GOAL) {
+      // Check left and add to openList if an available path
+      if(col > 0) { 
+      if((envCopy[row][col - 1] == SYMBOL_EMPTY || envCopy[row][col - 1] == SYMBOL_GOAL)) {
          q = new Node(row, col - 1, dis + 1);
          if(!openList->containsNode(q)) {
             openList->addBack(q);
          }
+         delete q;
+      }
       }
 
       // Add p to closed list
@@ -82,18 +94,19 @@ NodeList* PathPlanner::getReachableNodes(){
       }
 
    }
-   // Return deep copy of list
-   closedList = new NodeList(*closedList);
+   // Return deep copy of closed list
+   reachableNodes = new NodeList(*closedList);
    openList->clear();
-   return closedList;
+   return reachableNodes;
 }
 
 NodeList* PathPlanner::getPath(){
    // Get Node for goal position
    Node* p = new Node(0, 0, 0);
-   for(int i = 0; i < closedList->getLength(); ++i) {
-      if(envCopy[closedList->get(i)->getRow()][closedList->get(i)->getCol()] == SYMBOL_GOAL) {
-         p = new Node(*closedList->get(i));
+   for(int i = 0; i < reachableNodes->getLength(); ++i) {
+      if(envCopy[reachableNodes->get(i)->getRow()][reachableNodes->get(i)->getCol()] == SYMBOL_GOAL) {
+         delete p;
+         p = new Node(*reachableNodes->get(i));
          break;
       }
    }
@@ -101,39 +114,39 @@ NodeList* PathPlanner::getPath(){
    NodeList* path = new NodeList();
    path->addBack(p);
 
-   // Create a list to add the cardinal directions around p
+   // Add available neighbours to a list
    NodeList* openList = new NodeList();
    Node* q;
    while(p->getDistanceToS() != 0) {
-      for(int i = closedList->getLength() - 1; i >= 0; --i) {
-         // 
-         q = closedList->get(i);
+      for(int i = reachableNodes->getLength() - 1; i >= 0; --i) {
+         // Check up
+         q = reachableNodes->get(i);
          if(q->getRow() == p->getRow() - 1 && q->getCol() == p ->getCol()) {
             openList->addBack(q);
-         }
+         } // Check right
          if(q->getRow() == p->getRow() && q->getCol() == p ->getCol() + 1) {
             openList->addBack(q);
-         }
+         } // Check down
          if(q->getRow() == p->getRow() + 1 && q->getCol() == p ->getCol()) {
             openList->addBack(q);
-         }
+         } // Check left
          if(q->getRow() == p->getRow() && q->getCol() == p ->getCol() - 1) {
             openList->addBack(q);
          }
-      }
+      } // Point p to Node with lowest distance to S
       for(int i = 0; i < openList->getLength(); ++i) {
          if(openList->get(i)->getDistanceToS() < p->getDistanceToS()){
             p = openList->get(i);
          }
-      }
+      } // Add p to solution path if not already added
       if(!path->containsNode(p)){
             path->addBack(p);
       }
    }
 
+   // Return a deep copy of the path
    NodeList* copyPath = new NodeList(*path);
-   copyPath->printNodes();
-   delete p;
+   // copyPath->printNodes();
    delete path;
    return copyPath;
 }

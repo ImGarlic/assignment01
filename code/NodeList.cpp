@@ -4,13 +4,13 @@
 
 
 
-NodeList::NodeList() : 
-   length(0) 
-{}
+NodeList::NodeList() : length(0){
+
+}
 
 
 NodeList::~NodeList(){
-   
+   this->clear();
 }
 
 NodeList::NodeList(NodeList& other) : length(other.length){
@@ -24,13 +24,12 @@ int NodeList::getLength(){
    return length;
 }
 
-
 NodePtr NodeList::get(int i){
    return nodes[i];
 }
 
 void NodeList::addBack(NodePtr newNode){
-   this->nodes[length] = newNode;
+   this->nodes[length] = new Node(*newNode);
    ++length;
 }
 
@@ -44,9 +43,11 @@ bool NodeList::containsNode(NodePtr node){
 }
 
 void NodeList::clear(){
-   for(int i = length - 1; i >=0; --i){
-      delete this->nodes[i];
-      --length;
+   if(length > 0) {
+      for(int i = length - 1; i >= 0; --i){
+         delete nodes[i];
+         --length;
+      }
    }
 }
 

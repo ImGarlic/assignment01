@@ -38,8 +38,9 @@ public:
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
+
    private:
-      //Global copy of the input environment. Can't pass by reference?
+      // Global copy of the input environment. 
       Env envCopy;
 
       // Inital Position Node
@@ -48,6 +49,7 @@ public:
       // Open and closed list
       NodeList* openList;
       NodeList* closedList;
+      NodeList* reachableNodes;
 };
 
 #endif // COSC_ASS_ONE_PATH_PLANNING

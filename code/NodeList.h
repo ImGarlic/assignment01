@@ -48,14 +48,17 @@ public:
    // Print all nodes for testing
    void printNodes();
 
+   // Set max size of dynamic NodeList
+   void setSize(int size);
+
    /* This is a suggestion of what you could use. */
    /* You can change this code.                   */
 private:
 
    // NodeList: list of node objects
    // You may assume a fixed size for M1, M2, M3
-   NodePtr    nodes[NODE_LIST_ARRAY_MAX_SIZE];
-   // Number of nodes currently in the NodeList
+   // NodePtr*    nodes;
+   NodePtr    nodes[NODE_LIST_ARRAY_MAX_SIZE];   // Number of nodes currently in the NodeList
    int      length;
 
 
