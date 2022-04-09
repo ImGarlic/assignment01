@@ -13,4 +13,6 @@ This program always assumes that there is an environment input - no exceptions a
 Also, as per the assignment specifications, the environment must always be completely surrounded by walls; and there must always be a start 
 and goal position included. 
 
+This implementation only includes up to milestone 3 - so please only input environments of the 20x20 variety.
+
 Thanks :)
