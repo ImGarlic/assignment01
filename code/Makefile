@@ -1,11 +1,11 @@
 .default: all
 
-all: main
+all: assign1
 
 clean:
-	rm -f main *.o actual.out
+	rm -f assign1 *.o actual.out
 
-main: main.o Node.o NodeList.o PathPlanner.o
+assign1: main.o Node.o NodeList.o PathPlanner.o
 	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
 
 %.o: %.cpp

@@ -5,7 +5,7 @@
 #include <math.h> 
 
 #define ENV_DIM                     20
-#define NODE_LIST_ARRAY_MAX_SIZE    4*(ENV_DIM * ENV_DIM)
+#define NODE_LIST_ARRAY_MAX_SIZE    (ENV_DIM * ENV_DIM)
 
 // A 2D array to represent the maze or observations
 // REMEMBER: in a grid, the location (x,y) is found by grid[y][x]!

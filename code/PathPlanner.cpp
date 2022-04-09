@@ -73,21 +73,22 @@ NodeList* PathPlanner::getReachableNodes(){
       }
       // Check left and add to openList if an available path
       if(col > 0) { 
-      if((envCopy[row][col - 1] == SYMBOL_EMPTY || envCopy[row][col - 1] == SYMBOL_GOAL)) {
-         q = new Node(row, col - 1, dis + 1);
-         if(!openList->containsNode(q)) {
-            openList->addBack(q);
-         }
-         delete q;
+         if((envCopy[row][col - 1] == SYMBOL_EMPTY || envCopy[row][col - 1] == SYMBOL_GOAL)) {
+            q = new Node(row, col - 1, dis + 1);
+            if(!openList->containsNode(q)) {
+               openList->addBack(q);
+            }
+            delete q;
       }
       }
 
       // Add p to closed list
       closedList->addBack(p);
+      delete p;
       // Select new p from openList not in closedList
-      for(int i = 0; i < openList->getLength(); ++i) {
-         if(!closedList->containsNode(openList->get(i))) {
-            p = openList->get(i);
+      for(int i = openList->getLength() - 1; i >= 0; --i) {
+         if(!(closedList->containsNode(openList->get(i)))) {
+            p = new Node(*openList->get(i));
          }
       }
 
