@@ -14,21 +14,10 @@ void testNodeList();
 void testReadEnv(Env env, int rows, int cols);
 
 
-std::string maze = "maze.env";
-
-// Read an environment from standard input, redirected from "maze.env" file.
+// Read an environment from standard input
 void readEnvStdin(Env env, int rows, int cols);
 
-// Allocate memory for an environments of any size
-Env makeEnv(int rows, int cols);
-void deleteEnv(Env env, int rows, int cols);
-
-// Get number of rows and collumns for dynamically sized environment
-int getRows();
-int getCols();
-
 // Print out a Environment to standard output with path.
-// To be implemented for Milestone 3
 void printPath(Env env, NodeList* solution);
 
 // Print a list of the reachable positions and the list length
@@ -38,10 +27,10 @@ void printReachablePositions(NodeList* reachablePositions);
 
 int main(int argc, char** argv){
 
-    // Load dynamic environment
-    int rows = getRows();
-    int cols = getCols();
-    Env env = makeEnv(rows, cols);
+    // Load environment
+    Env env;
+    int rows = ENV_DIM;
+    int cols = ENV_DIM;
 
     // Read environment to the Env array
     readEnvStdin(env, rows, cols);
@@ -50,7 +39,6 @@ int main(int argc, char** argv){
     PathPlanner* pathplanner = new PathPlanner(env, rows, cols);
     NodeList* reachablePositions = nullptr;
     reachablePositions = pathplanner->getReachableNodes();
-    // printReachablePositions(reachablePositions);
 
     // Get the path
     NodeList* solution = pathplanner->getPath();
@@ -58,7 +46,7 @@ int main(int argc, char** argv){
     //print the path
     printPath(env, solution);
     
-    deleteEnv(env, rows, cols);
+    // Cleanup
     delete pathplanner;
     delete reachablePositions;
     delete solution;
@@ -66,62 +54,13 @@ int main(int argc, char** argv){
 }
 
 void readEnvStdin(Env env, int rows, int cols){
-    std::ifstream file(maze);
+    while(!std::cin.eof()){
         for(int row = 0; row < rows; ++row) {
             for(int col = 0; col < cols; ++col) {
-                file >> env[row][col];
-            }
-        }
-    file.close();
-}
-
-int getRows() {
-    std::ifstream file(maze);
-    char c;
-    int rows = 1;
-    while(!file.eof()) {
-        file.get(c);
-        if(c == '\n') {
-            ++rows;
+                std::cin >> env[row][col];
         }
     }
-    return rows;
-}
-
-int getCols() {
-    std::ifstream file(maze);
-    char c;
-    int cols = 0;
-    file.get(c);
-    while(c != '\n') {
-        file.get(c);
-        ++cols;
     }
-    return cols;
-}
-
-Env makeEnv(int rows, int cols) {
-    Env env = nullptr;
-
-    if (rows >= 0 && cols >= 0) {
-        env = new char*[rows];
-        for (int i = 0; i < rows; ++i) {
-             env[i] = new char[cols];
-        }
-    }
-
-   return env;
-}
-
-void deleteEnv(Env env, int rows, int cols) {
-   if (rows >= 0 && cols >= 0) {
-      for (int i = 0; i != rows; ++i) {
-         delete env[i];
-      }
-      delete env;
-   }
-
-   return;
 }
 
 void printPath(Env env, NodeList* solution) {
@@ -145,8 +84,8 @@ void printPath(Env env, NodeList* solution) {
         }
         p = q;
     }
-    int rows = getRows();
-    int cols = getCols();
+    int rows = ENV_DIM;
+    int cols = ENV_DIM;
     testReadEnv(env, rows, cols);
 }
 

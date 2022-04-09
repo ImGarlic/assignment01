@@ -5,7 +5,6 @@
 
 
 NodeList::NodeList() : length(0){
-
 }
 
 
@@ -14,9 +13,9 @@ NodeList::~NodeList(){
 }
 
 NodeList::NodeList(NodeList& other) : length(other.length){
-    for(int i = 0; i < length; ++i) {
-       nodes[i] = new Node(*other.nodes[i]);
-    }
+   for(int i = 0; i < length; ++i) {
+      nodes[i] = new Node(*other.nodes[i]);
+   }
 }
 
 
@@ -29,7 +28,7 @@ NodePtr NodeList::get(int i){
 }
 
 void NodeList::addBack(NodePtr newNode){
-   this->nodes[length] = new Node(*newNode);
+   nodes[length] = new Node(*newNode);
    ++length;
 }
 
@@ -43,8 +42,15 @@ bool NodeList::containsNode(NodePtr node){
 }
 
 void NodeList::clear(){
-   if(length > 0) {
-      for(int i = length - 1; i >= 0; --i){
+   // if(length > 0) {
+   //    for(int i = length - 1; i >= 0; --i){
+   //       delete nodes[i];
+   //       --length;
+   //    }
+   // }
+   int num = length;
+   for(int i = 0; i < num; ++ i) {
+      if(nodes[i] != nullptr) {
          delete nodes[i];
          --length;
       }

@@ -4,15 +4,13 @@
 #include <iostream>
 
 
-PathPlanner::PathPlanner(Env env, int rows, int cols)  : envCopy(env)  {
-      // Copy env input to private Env
-      // Only works for fixed size environment, must be removed for milestone 4
-   //    for(int row = 0; row < rows; ++row) {
-   //       for(int col = 0; col < cols; ++col) {
-   //          envCopy[row][col] = env[row][col];
-   //          }
-   //    }
-
+PathPlanner::PathPlanner(Env env, int rows, int cols) {
+   // Copy env to global env
+   for(int row = 0; row < rows; ++row){
+      for(int col = 0; col < cols; ++col){     
+         envCopy[row][col] = env[row][col];
+      }
+   }
    // Create first Node as initial position
    for(int row = 0; row < rows; ++row){
       for(int col = 0; col < cols; ++col){     
@@ -24,8 +22,8 @@ PathPlanner::PathPlanner(Env env, int rows, int cols)  : envCopy(env)  {
 }
 
 PathPlanner::~PathPlanner(){
-   delete this->openList;
-   delete this->closedList;
+   delete openList;
+   delete closedList;
 }
 
 void PathPlanner::initialPosition(int row, int col){
@@ -95,19 +93,16 @@ NodeList* PathPlanner::getReachableNodes(){
 
    }
    // Return deep copy of closed list
-   reachableNodes = new NodeList(*closedList);
-   openList->clear();
-   return reachableNodes;
+   return new NodeList(*closedList);
 }
 
 NodeList* PathPlanner::getPath(){
    // Get Node for goal position
    Node* p = new Node(0, 0, 0);
-   for(int i = 0; i < reachableNodes->getLength(); ++i) {
-      if(envCopy[reachableNodes->get(i)->getRow()][reachableNodes->get(i)->getCol()] == SYMBOL_GOAL) {
+   for(int i = 0; i < closedList->getLength(); ++i) {
+      if(envCopy[closedList->get(i)->getRow()][closedList->get(i)->getCol()] == SYMBOL_GOAL) {
          delete p;
-         p = new Node(*reachableNodes->get(i));
-         break;
+         p = new Node(*closedList->get(i));
       }
    }
    // Create path node list and add goal position
@@ -115,12 +110,12 @@ NodeList* PathPlanner::getPath(){
    path->addBack(p);
 
    // Add available neighbours to a list
-   NodeList* openList = new NodeList();
+   openList->clear();
    Node* q;
    while(p->getDistanceToS() != 0) {
-      for(int i = reachableNodes->getLength() - 1; i >= 0; --i) {
+      for(int i = closedList->getLength() - 1; i >= 0; --i) {
+         q = new Node(*closedList->get(i));
          // Check up
-         q = reachableNodes->get(i);
          if(q->getRow() == p->getRow() - 1 && q->getCol() == p ->getCol()) {
             openList->addBack(q);
          } // Check right
@@ -133,7 +128,8 @@ NodeList* PathPlanner::getPath(){
          if(q->getRow() == p->getRow() && q->getCol() == p ->getCol() - 1) {
             openList->addBack(q);
          }
-      } // Point p to Node with lowest distance to S
+         delete q;
+      } // Point p to Node in openList with lowest distance to S
       for(int i = 0; i < openList->getLength(); ++i) {
          if(openList->get(i)->getDistanceToS() < p->getDistanceToS()){
             p = openList->get(i);
@@ -145,8 +141,5 @@ NodeList* PathPlanner::getPath(){
    }
 
    // Return a deep copy of the path
-   NodeList* copyPath = new NodeList(*path);
-   // copyPath->printNodes();
-   delete path;
-   return copyPath;
+   return new NodeList(*path);
 }

@@ -49,7 +49,6 @@ public:
       // Open and closed list
       NodeList* openList;
       NodeList* closedList;
-      NodeList* reachableNodes;
 };
 
 #endif // COSC_ASS_ONE_PATH_PLANNING
